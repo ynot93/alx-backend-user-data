@@ -13,21 +13,17 @@ from mysql.connector import connection
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields: Sequence, redaction: str, message: str, separator: str) -> str:
+def filter_datum(fields: Sequence,
+                 redaction: str,
+                 message: str,
+                 separator: str) -> str:
     """
     Returns the log message obfuscated
 
     """
     pattern = re.compile(f"({'|'.join(fields)})=.*?{separator}")
-
-    def substitute(match: str) -> str:
-        """
-        Substitute match with obfuscation text
-
-        """
-        return f"{match.group(1)}={redaction}{separator}"
-
-    return pattern.sub(substitute, message)
+    return pattern.sub(
+        lambda m: f"{m.group(1)}={redaction}{separator}", message)
 
 
 class RedactingFormatter(logging.Formatter):
@@ -45,8 +41,10 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        record.msg = filter_datum(self.fields, self.REDACTION, record.msg, self.SEPARATOR)
-        
+        record.msg = filter_datum(self.fields,
+                                  self.REDACTION,
+                                  record.msg,
+                                  self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
 
 
@@ -62,7 +60,7 @@ def get_logger() -> logging.Logger:
     s_handler = logging.StreamHandler()
     s_formatter = RedactingFormatter(PII_FIELDS)
     s_handler.setFormatter(s_formatter)
-    
+
     logger.addHandler(s_handler)
     return logger
 
@@ -100,7 +98,8 @@ def main() -> None:
     columns = [col[0] for col in cursor.description]
     for row in rows:
         row_data = dict(zip(columns, row))
-        log_message = "; ".join([f"{key}={value}" for key, value in row_data.items()]) + ";"
+        log_message = "; ".join(
+            [f"{key}={value}" for key, value in row_data.items()]) + ";"
         logger.info(log_message)
 
     cursor.close()
