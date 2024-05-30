@@ -13,19 +13,6 @@ from mysql.connector import connection
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields: Sequence,
-                 redaction: str,
-                 message: str,
-                 separator: str) -> str:
-    """
-    Returns the log message obfuscated
-
-    """
-    pattern = re.compile(f"({'|'.join(fields)})=.*?{separator}")
-    return pattern.sub(
-        lambda m: f"{m.group(1)}={redaction}{separator}", message)
-
-
 class RedactingFormatter(logging.Formatter):
     """
     Redacting Formatter class
@@ -46,6 +33,19 @@ class RedactingFormatter(logging.Formatter):
                                   record.msg,
                                   self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
+
+
+def filter_datum(fields: Sequence,
+                 redaction: str,
+                 message: str,
+                 separator: str) -> str:
+    """
+    Returns the log message obfuscated
+
+    """
+    pattern = re.compile(f"({'|'.join(fields)})=.*?{separator}")
+    return pattern.sub(
+        lambda m: f"{m.group(1)}={redaction}{separator}", message)
 
 
 def get_logger() -> logging.Logger:
