@@ -2,11 +2,13 @@
 """
 Route module for the API
 """
-from os import getenv
-from api.v1.views import app_views
-from flask import Flask, jsonify, abort, request
-from flask_cors import (CORS, cross_origin)
+from flask import Flask, jsonify, request, abort
+from flask_cors import CORS
 import os
+
+from api.v1.views import app_views
+from api.v1.auth.auth import Auth
+from api.v1.auth.basic_auth import BasicAuth
 
 
 app = Flask(__name__)
@@ -15,10 +17,8 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
 if os.getenv('AUTH_TYPE') == 'auth':
-    from api.v1.auth.auth import Auth
     auth = Auth()
 elif os.getenv('AUTH_TYPE') == 'basic_auth':
-    from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
 
@@ -30,7 +30,7 @@ def not_found(error) -> str:
 
 
 @app.errorhandler(401)
-def not_authenticated(error) -> str:
+def unauthorized(error) -> str:
     """ Not authenticated handler
     """
     return jsonify({"error": "Unauthorized"}), 401
