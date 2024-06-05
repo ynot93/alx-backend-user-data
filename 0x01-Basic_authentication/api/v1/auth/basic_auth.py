@@ -66,7 +66,7 @@ class BasicAuth(Auth):
         header.
 
         Args:
-            decoded_base64_authorization_header (str): The decoded authorization
+            decoded_base64_authorization_header (str): The decoded auth
             header.
 
         Returns:
