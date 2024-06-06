@@ -5,6 +5,7 @@ This module deals with user authentication
 """
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth():
@@ -48,3 +49,15 @@ class Auth():
 
         """
         return None
+
+    def session_cookie(self, request=None) -> str:
+        """
+        Retrieve the value of the session cookie from a request.
+
+        """
+        if request is None:
+            return None
+
+        session_cookie_name = os.getenv('SESSION_NAME')
+
+        return request.cookies.get(session_cookie_name)
