@@ -101,14 +101,15 @@ class BasicAuth(Auth):
         if user_pwd is None or not isinstance(user_pwd, str):
             return None
 
-        user = User.search(user_email)
-        if user is None:
+        user = User.search({"email": user_email})
+        # print(user)
+        if not user:
             return None
 
-        if not user.is_valid_password(user_pwd):
+        if not user[0].is_valid_password(user_pwd):
             return None
 
-        return user
+        return user[0]
 
     def current_user(self, request=None) -> Optional[User]:
         """
