@@ -125,12 +125,12 @@ def update_user(user_id: str = None) -> str:
     user.save()
     return jsonify(user.to_json()), 200
 
-@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def get_me():
-    """
-    GET /users/me
-    Retrieves the authenticated User object
-    """
-    if request.current_user is None:
-        abort(404)
-    return jsonify(request.current_user.to_json()), 200
+# @app_views.route('/users/me', methods=['GET'], strict_slashes=False)
+# def get_me():
+#     """
+#     GET /users/me
+#     Retrieves the authenticated User object
+#     """
+#     if request.current_user is None:
+#         abort(404)
+#     return jsonify(request.current_user.to_json()), 200

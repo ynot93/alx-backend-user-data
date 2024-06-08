@@ -7,8 +7,7 @@ from flask import jsonify, request, make_response, Blueprint, abort
 import os
 from models.user import User
 from api.v1.app import auth
-
-session_auth = Blueprint('session_auth', __name__, url_prefix='/auth_session')
+from api.v1.views import session_auth
 
 
 @session_auth.route('/login', methods=['POST'], strict_slashes=False)
