@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-SessionDBAuth module for session authentication with session IDs stored in the database.
+This module authenticates with session IDs stored in the db
+
 """
 
 from datetime import datetime, timedelta
@@ -10,7 +11,7 @@ from models.user_session import UserSession
 
 class SessionDBAuth(SessionExpAuth):
     """
-    SessionDBAuth class for handling session authentication with database storage
+    Handles session authentication with db storage
 
     """
 
@@ -36,7 +37,6 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_sessions = UserSession.search({"session_id": session_id})
-        print(user_sessions)
 
         if not user_sessions:
             return None
@@ -45,7 +45,8 @@ class SessionDBAuth(SessionExpAuth):
         if self.session_duration <= 0:
             return user_session.user_id
 
-        if user_session.created_at + timedelta(seconds=self.session_duration) < datetime.now():
+        if user_session.created_at + timedelta(seconds=self.session_duration) \
+                < datetime.now():
             return None
 
         return user_session.user_id
