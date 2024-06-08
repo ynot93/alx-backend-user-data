@@ -3,16 +3,17 @@
 Module for Session Authentication routes.
 """
 
-from flask import jsonify, request, make_response, Blueprint, abort
+from flask import jsonify, request, make_response, abort
 import os
 from models.user import User
-from api.v1.app import auth
 from api.v1.views import session_auth
 
 
 @session_auth.route('/login', methods=['POST'], strict_slashes=False)
 def login():
     """ Route for user login using Session Authentication """
+    from api.v1.app import auth
+
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -47,6 +48,7 @@ def login():
 @session_auth.route('/logout', methods=['DELETE'], strict_slashes=False)
 def logout():
     """ Route for user logout / session destruction """
+    from api.v1.app import auth
     if not auth.destroy_session(request):
         abort(404)
 

@@ -10,7 +10,8 @@ from models.user_session import UserSession
 
 class SessionDBAuth(SessionExpAuth):
     """
-    SessionDBAuth class for handling session authentication with database storage.
+    SessionDBAuth class for handling session authentication with database storage
+
     """
 
     def create_session(self, user_id=None):
@@ -35,6 +36,8 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_sessions = UserSession.search({"session_id": session_id})
+        print(user_sessions)
+
         if not user_sessions:
             return None
 

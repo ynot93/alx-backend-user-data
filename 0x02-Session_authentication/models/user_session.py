@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-UserSession module for handling user sessions stored in a file (database)
+User Session module for handling user sessions stored in a file
 
 """
 
 from models.base import Base
+
 
 class UserSession(Base):
     """
