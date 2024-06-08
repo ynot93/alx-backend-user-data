@@ -57,3 +57,18 @@ class User(Base):
             return "{}".format(self.last_name)
         else:
             return "{} {}".format(self.first_name, self.last_name)
+    
+    def __str__(self):
+        """
+        Display string representation of object
+
+        """
+        return f'<User {self.id}: {self.email}>'
+
+    def __repr__(self):
+        """
+        Show official representation of an object
+
+        """
+        return self.__str__()
+

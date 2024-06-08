@@ -6,12 +6,11 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 import os
 
-from api.v1.views import app_views, session_auth
+from api.v1.views import app_views
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
-app.register_blueprint(session_auth)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
