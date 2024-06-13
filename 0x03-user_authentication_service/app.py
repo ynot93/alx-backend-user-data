@@ -10,16 +10,16 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route('/')
-def index():
+@app.route('/', methods=['GET'])
+def index() -> str:
     """Index route that returns welcome msg
     """
     payload = {"message": "Bienvenue"}
-    return jsonify(payload)
+    return jsonify(payload), 200
 
 
 @app.route('/users', methods=['POST'])
-def users():
+def users() -> str:
     """Creates and stores users in the db
     """
     try:
@@ -32,7 +32,7 @@ def users():
 
 
 @app.route('/sessions', methods=['POST'])
-def login():
+def login() -> str:
     """Implements login
     """
     email = request.form.get('email')
@@ -47,7 +47,7 @@ def login():
 
 
 @app.route('/sessions', methods=['DELETE'])
-def logout():
+def logout() -> str:
     session_id = request.cookies.get('session_id')
     if not session_id:
         abort(403)
@@ -61,7 +61,7 @@ def logout():
 
 
 @app.route('/profile', methods=['GET'])
-def profile():
+def profile() -> str:
     session_id = request.cookies.get('session_id')
     if not session_id:
         abort(403)
@@ -70,11 +70,11 @@ def profile():
     if not user:
         abort(403)
 
-    return jsonify({"email": user.email})
+    return jsonify({"email": user.email}), 200
 
 
 @app.route("/reset_password", methods=["POST"])
-def reset_password():
+def get_reset_password_token() -> str:
     email = request.form.get("email")
     try:
         reset_token = AUTH.get_reset_password_token(email)
