@@ -15,10 +15,11 @@ def _hash_password(password: str) -> bytes:
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed
 
+
 def _generate_uuid(self) -> str:
-        """Generate a new UUID string
-        """
-        return str(uuid.uuid4())
+    """Generate a new UUID string
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
@@ -65,7 +66,7 @@ class Auth:
         """
         if session_id is None:
             return None
-        
+
         try:
             user = self._db.find_user_by(session_id=session_id)
             return user
@@ -91,7 +92,7 @@ class Auth:
             return reset_token
         except NoResultFound:
             raise ValueError(f"User {email} does not exist")
-    
+
     def update_password(self, reset_token: str, password: str) -> None:
         """Update a user's password using a reset token."""
         try:

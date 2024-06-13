@@ -8,22 +8,25 @@ def register_user(email: str, password: str) -> None:
     """Test registration of user
     """
     response = requests.post("http://0.0.0.0:5000/users",
-                             data={"email": email,"password": password})
+                             data={"email": email, "password": password})
     assert response.status_code == 200
     assert response.json() == {"email": email, "message": "user created"}
+
 
 def log_in_wrong_password(email: str, password: str) -> None:
     """Test log in with wrong pwd
     """
     response = requests.post("http://0.0.0.0:5000/sessions",
-                             data={"email": email,"password": password})
+                             data={"email": email, "password": password})
     assert response.status_code == 401
-    
+
+
 def profile_unlogged() -> None:
     """Test accessing profile without valid session
     """
     response = requests.get("http://0.0.0.0:5000/profile")
     assert response.status_code == 403
+
 
 def log_in(email: str, password: str) -> str:
     """Test valid login using session authentication
@@ -34,6 +37,7 @@ def log_in(email: str, password: str) -> str:
     assert "session_id" in response.cookies
     return response.cookies["session_id"]
 
+
 def profile_logged(session_id: str) -> None:
     """Test access profile with valid session
     """
@@ -42,12 +46,14 @@ def profile_logged(session_id: str) -> None:
     assert response.status_code == 200
     assert "email" in response.json()
 
+
 def log_out(session_id: str) -> None:
     """Test successful logout by deleting session
     """
     response = requests.delete("http://0.0.0.0:5000/sessions",
                                cookies={"session_id": session_id})
     assert response.status_code == 200
+
 
 def reset_password_token(email: str) -> str:
     """Test successful reset password
@@ -56,6 +62,7 @@ def reset_password_token(email: str) -> str:
                              data={"email": email})
     assert response.status_code == 200
     return response.json()["reset_token"]
+
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
     """Test successful password update
