@@ -9,7 +9,6 @@ from sqlalchemy.exc import InvalidRequestError
 
 
 from user import Base, User
-from typing import Type
 
 
 class DB:
@@ -25,7 +24,7 @@ class DB:
         self.__session = None
 
     @property
-    def _session(self) -> Session:
+    def session(self) -> Session:
         """Memoized session object
         """
         if self.__session is None:
@@ -37,14 +36,14 @@ class DB:
         """Create and store a new user
         """
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
+        self.session.add(user)
+        self.session.commit()
         return user
 
     def find_user_by(self, **kwargs) -> User:
         """Return a filtered user
         """
-        session = self._session
+        session = self.session
         try:
             filtered_user = session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
@@ -57,7 +56,7 @@ class DB:
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update a user's attributes
         """
-        session = self._session
+        session = self.session
         user = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
             if not hasattr(user, key):
