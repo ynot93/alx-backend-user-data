@@ -5,7 +5,6 @@ from flask import (Flask, jsonify, request, abort,
                    make_response, redirect, url_for)
 from auth import Auth
 
-
 app = Flask(__name__)
 AUTH = Auth()
 
