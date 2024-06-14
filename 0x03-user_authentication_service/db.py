@@ -33,7 +33,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> Type['User']:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Create and store a new user
         """
         user = User(email=email, hashed_password=hashed_password)
@@ -41,7 +41,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """Return a filtered user
         """
         session = self._session
