@@ -44,7 +44,7 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            hashed_password = user.hashed_password
+            hashed_password = user.hashed_password.encode('utf-8')
             return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
         except NoResultFound:
             return False
@@ -98,7 +98,8 @@ class Auth:
         try:
             user = self._db.find_user_by(reset_token=reset_token)
             hashed_password = _hash_password(password)
-            self._db.update_user(user.id, hashed_password=hashed_password,
+            self._db.update_user(user.id,
+                                 hashed_password=hashed_password.decode('utf-8'),
                                  reset_token=None)
         except NoResultFound:
             raise ValueError("Invalid reset token")
